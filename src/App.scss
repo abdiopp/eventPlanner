@@ -1,0 +1,72 @@
+@import './scss/bootstrap';
+@import './scss/varriable';
+@import './scss/mixins';
+@import './scss/extend';
+@import './scss/responsive';
+@import './scss/reset';
+@import './scss/btn';
+@import './scss/section_title';
+@import './scss/slick-nav';
+@import '../node_modules/react-toastify/dist/ReactToastify.css';
+
+
+// header
+// @import './scss/header';
+
+
+// slider
+@import './scss/slider';
+
+// about
+@import './scss/about';
+
+// about
+@import './scss/speakers';
+
+// about
+@import './scss/resister';
+
+// about
+@import './scss/faq';
+// about
+@import './scss/event';
+
+
+// footer
+@import './scss/footer';
+
+
+// inner_page
+@import './scss/bradcam';
+@import './scss/team';
+
+
+
+// other pages default
+
+// contact
+@import './scss/contact';
+
+// elements
+@import './scss/elements.scss';
+
+// blog
+@import './scss/blog';
+
+
+// blog part
+@import './scss/blog_part';
+
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    a{
+        text-decoration: none;
+    }
+}
+
+main {
+    flex: 1 0 auto;
+}
+
