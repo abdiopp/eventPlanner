@@ -19,7 +19,7 @@ export default function ReadMyEvents() {
     };
     const { user } = useContext(AuthContext)
 
-    const [documents, setDocuments] = useState([])
+    const [documents, setdocuments] = useState([])
     const [event, setevent] = useState({})
     const [isProcessing, setIsProcessing] = useState(false)
     const [isProcessingDelete, setIsProcessingDelete] = useState(false)
@@ -42,7 +42,7 @@ export default function ReadMyEvents() {
             // console.log(data);
         });
 
-        setDocuments(array)
+        setdocuments(array)
     }
 
     useEffect(() => {
@@ -72,7 +72,7 @@ export default function ReadMyEvents() {
                 return doc
             })
 
-            setDocuments(newDocuments)
+            setdocuments(newDocuments)
         } catch (err) {
             console.error(err)
             window.toastify("Something went went wrong, Event isn't updated", "error")
@@ -90,7 +90,7 @@ export default function ReadMyEvents() {
             let newDocuments = documents.filter((doc) => {
                 return doc.id !== event.id
             })
-            setDocuments(newDocuments)
+            setdocuments(newDocuments)
             setIsProcessingDelete(false)
 
         } catch (err) {
@@ -98,6 +98,8 @@ export default function ReadMyEvents() {
             window.toastify("Something went wrong", "error")
         }
     }
+
+
     return (
         <>
 
@@ -106,7 +108,57 @@ export default function ReadMyEvents() {
                     <div className="row">
                         <div className="col text-center text-info fw-bold fs-1 mb-5 mt-4">Your Events</div>
                     </div>
-                    <div className="row">
+                    <div className="table-responsive">
+                        <table class="table table-bordered table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Organized By</th>
+                                    <th scope="col">Subject</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Attendies</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {documents.map((event, i) => {
+                                    return <tr key={i}>
+                                        <td>{i + 1}</td>
+                                        <td>{event.title}</td>
+                                        <td>{event.createdBy.displayName}</td>
+                                        <td>{event.description}</td>
+                                        <td>{event.date}</td>
+                                        <td>{event.time}</td>
+                                        <td>{event.location}</td>
+                                        <td>{'attendies'}</td>
+                                        {/* <td>{event.location}</td> */}
+                                        <td>
+                                            <button className='btn btn-primary text-white btn-sm col-12 ' data-bs-toggle="modal" data-bs-target="#editModal" onClick={() => { setevent(event) }}>
+                                                {!isProcessing
+                                                    ? "Edit"
+                                                    : <div className='spinner-border spinner-border-sm'></div>
+                                                }
+                                            </button>
+                                            <button className='btn btn-danger btn-sm col-12 mt-1' disabled={isProcessingDelete} onClick={() => { handleDelete(event) }}>
+                                                {!isProcessingDelete
+                                                    ? "Delete"
+                                                    : <div className='spinner-border spinner-border-sm'></div>
+                                                }
+                                            </button>
+                                        </td>
+                                    </tr>
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                    {/* <div className="row">
                         <div className="col col-md-2 fw-bold text-center mb-4">Title</div>
                         <div className="col col-md-2 fw-bold text-center mb-4">Organized by</div>
                         <div className="col col-md-2 fw-bold text-center mb-4">Subject</div>
@@ -140,7 +192,7 @@ export default function ReadMyEvents() {
                             </div>
                             <hr />
                         </div>
-                    })}
+                    })} */}
                 </div>
             </div>
 
