@@ -34,7 +34,6 @@ export default function MyEvents() {
     const [isProcessing, setIsProcessing] = useState(false)
 
 
-
     const handleChange = (e) => {
 
         setState({
@@ -80,15 +79,14 @@ export default function MyEvents() {
 
         }
         let formData = {
-            title, location, description, time, date
+            title, location, description, time, date, attendies: [],
         }
-
         formData.dateCreated = serverTimestamp();
         formData.id = Math.random().toString(36).slice(2);
         formData.createdBy = {
             email: user.email,
             uid: user.uid,
-            displayName: user.displayName
+            displayName: user.fullName
         }
 
         createDocument(formData);

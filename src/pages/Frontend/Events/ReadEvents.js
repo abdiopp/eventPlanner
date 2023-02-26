@@ -10,12 +10,11 @@ export default function ReadEvents() {
     const [isprocessing, setIsProcessing] = useState(false)
     const [event, setevent] = useState({})
 
-
-
-
     const { user } = useContext(AuthContext)
 
 
+
+    console.log('documents', documents)
 
     const fetchDocuments = async () => {
         let array = [];
@@ -36,7 +35,7 @@ export default function ReadEvents() {
     useEffect(() => {
         fetchDocuments()
         // eslint-disable-next-line
-    }, [user])
+    }, [])
 
 
     // const joinEvent = async (event) => {
@@ -73,10 +72,58 @@ export default function ReadEvents() {
 
     // }
 
-    const joinEvent = () => {
-        window.toastify("This Function isn't added", "error");
+    // const joinEvent = () => {
+    //     setIsJoining(true)
+    //     firestore.collection("events").doc.id.update({
+    //         attendies: {
+    //             user
+    //         }
+    //     }).then(function () {
+    //         console.log("Frank food updated");
+    //     });
+    // }
+
+    // useEffect(() => {
+
+    //     for (const document of documents) {
+    //         // console.log(document);
+    //  let findId = 
+    //     }
+
+
+    // }, [user])
+
+
+
+
+    const handleEventJoin = async (item) => {
+        console.log('event =>', item.id)
+        const docRef = doc(firestore, "events", item.id)
+        let { fullName, email, uid } = user;
+        const formData = {
+            fullName,
+            email,
+            uid
+        }
+
+        let findData = documents.find((eventDoc) => {
+            return eventDoc.id === item.id
+        })
+
+        let attendiesData = findData?.attendies;
+        attendiesData.push(formData)
+        console.log(findData);
+
+        try {
+            await setDoc(docRef, findData, { merge: true })
+            console.log("Data has been updated");
+        } catch (error) {
+            console.log(error);
+        }
+
 
     }
+
 
     return (
         <>
@@ -105,7 +152,9 @@ export default function ReadEvents() {
                             </div>
                             <div className="action buttons mt-2 row justify-content-center ">
 
-                                <button className='btn btn-primary text-white col-3  btn-sm me-1' onClick={joinEvent}>
+                                <button className='btn btn-primary text-white col-3  btn-sm me-1'
+                                    onClick={() => handleEventJoin(event)}
+                                >
                                     {!isJoining
                                         ? "Join Event"
                                         : <div className='spinner-border spinner-border-sm'></div>

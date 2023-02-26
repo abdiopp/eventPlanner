@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "./../../../config/firebase";
+import { auth, firestore } from "./../../../config/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
+import { doc, setDoc } from "firebase/firestore";
 
 const initialState = { email: "", password: "", displayName: '' };
 
@@ -19,22 +20,15 @@ export default function Register() {
 
 
   const handleRegister = () => {
-    const { email, password, displayName } = state;
+    const { email, password } = state;
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-        dispatch({ type: "LOGIN", payload: { user } });
-        updateProfile(auth.currentUser, {
-          displayName: displayName
-        }).then(() => {
-          // Profile updated!
-          // ...
-        }).catch((error) => {
-          // An error occurred
-          // ...
-        });
+        createUserProfile(user)
+
+
         // navigate("/");
 
         // ...
@@ -46,6 +40,24 @@ export default function Register() {
         // ..
       });
   };
+
+  const createUserProfile = async (userCredential) => {
+
+    let { email, uid } = userCredential
+    let user = {
+      fullName: state.displayName,
+      email,
+      uid,
+    }
+
+    try {
+      await setDoc(doc(firestore, "users", user.uid), user);
+      dispatch({ type: "LOGIN", payload: { user } });
+
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <div className="slider_bg_1">

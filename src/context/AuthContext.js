@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useReducer } from "react";
-import { auth } from "../config/firebase";
+import React, { createContext, useEffect, useReducer, useState } from "react";
+import { auth, firestore } from "../config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export const AuthContext = createContext();
 const initialState = { isAuthenticated: false, user: { uid: "" } }
@@ -21,6 +22,7 @@ const reducer = ((state, { type, payload }) => {
   }
 })
 export default function AuthContextProvider({ children }) {
+  const [user, setUser] = useState({})
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -29,7 +31,8 @@ export default function AuthContextProvider({ children }) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         console.log("User is signed in");
-        dispatch({ type: "LOGIN", payload: { user } });
+        readUserData(user)
+
         // ...
       } else {
         // User is signed out
@@ -39,8 +42,25 @@ export default function AuthContextProvider({ children }) {
     });
   }, []);
 
+  const readUserData = async (user) => {
+
+    const docRef = doc(firestore, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // console.log("Document data:", docSnap.data());
+      let userData = docSnap.data()
+      setUser(userData)
+      // console.log("userData =>", userData)
+      dispatch({ type: "LOGIN", payload: { user } });
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ ...state, dispatch }}>
+    <AuthContext.Provider value={{ ...state, dispatch, user }}>
       {children}
     </AuthContext.Provider>
   );
