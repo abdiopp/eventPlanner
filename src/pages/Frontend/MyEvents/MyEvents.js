@@ -13,6 +13,7 @@ const initialState = {
     date: '',
     time: '',
     location: '',
+    attendies: 'N/A'
 }
 
 export default function MyEvents() {
@@ -47,7 +48,7 @@ export default function MyEvents() {
     const handleSubmit = e => {
         e.preventDefault();
 
-        let { title, location, description, date, time } = state
+        let { title, location, description, date, time, attendies } = state
 
         title = title.trim()
         location = location.trim()
@@ -79,14 +80,14 @@ export default function MyEvents() {
 
         }
         let formData = {
-            title, location, description, time, date, attendies: [],
+            title, location, description, time, date, attendies: []
         }
         formData.dateCreated = serverTimestamp();
         formData.id = Math.random().toString(36).slice(2);
         formData.createdBy = {
             email: user.email,
             uid: user.uid,
-            displayName: user.fullName
+            displayName: user.displayName
         }
 
         createDocument(formData);
@@ -98,6 +99,7 @@ export default function MyEvents() {
             await setDoc(doc(firestore, "events", formData.id), formData);
             window.toastify("Event has been successfully added", "success");
         } catch (err) {
+            console.error(err)
             window.toastify("Something went went wrong, Event isn't added.", "error")
         }
         setIsProcessing(false)

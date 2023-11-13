@@ -109,7 +109,7 @@ export default function ReadMyEvents() {
                         <div className="col text-center text-info fw-bold fs-1 mb-5 mt-4">Your Events</div>
                     </div>
                     <div className="table-responsive">
-                        <table class="table table-bordered table-primary">
+                        <table className="table table-bordered table-primary">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>

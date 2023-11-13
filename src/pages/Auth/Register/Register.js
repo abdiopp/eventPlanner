@@ -41,22 +41,18 @@ export default function Register() {
       });
   };
 
-  const createUserProfile = async (userCredential) => {
+  const createUserProfile = async () => {
+    const { displayName } = state;
 
-    let { email, uid } = userCredential
-    let user = {
-      fullName: state.displayName,
-      email,
-      uid,
-    }
-
-    try {
-      await setDoc(doc(firestore, "users", user.uid), user);
-      dispatch({ type: "LOGIN", payload: { user } });
-
-    } catch (e) {
-      console.error(e)
-    }
+    updateProfile(auth.currentUser, {
+      displayName: displayName
+    }).then(() => {
+      // Profile updated!
+      // ...
+    }).catch((error) => {
+      // An error occurred
+      // ...
+    });
   }
 
   return (

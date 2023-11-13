@@ -7,14 +7,11 @@ export default function ReadEvents() {
 
     const [documents, setDocuments] = useState([])
     const [isJoining, setIsJoining] = useState(false)
-    const [isprocessing, setIsProcessing] = useState(false)
-    const [event, setevent] = useState({})
 
     const { user } = useContext(AuthContext)
 
 
 
-    console.log('documents', documents)
 
     const fetchDocuments = async () => {
         let array = [];
@@ -38,90 +35,11 @@ export default function ReadEvents() {
     }, [])
 
 
-    // const joinEvent = async (event) => {
-
-
-    //     firestore.collection("events").doc.id.update({
-    //         attendies: {
-    //             user
-    //         }
-    //     }).then(function () {
-    //         console.log("Frank food updated");
-    //     });
-
-    // let attendies = event.attendees || []
-    // attendies.push(user.uid)
-    // let formData = { document }
-    // setIsProcessing(true)
-    // try {
-    //     await updateDoc(doc(firestore, "events", formData.id), formData);
-    //     window.toastify("Event has been successfully joined", "success");
-
-    //     let newDocuments = documents.map((doc) => {
-    //         if (doc.id === event.id)
-    //             return event
-    //         return doc
-    //     })
-
-    //     setDocuments(newDocuments)
-    // } catch (err) {
-    //     console.error(err)
-    //     window.toastify("Something went went wrong", "error")
-    // }
-    // setIsProcessing(false)
-
-    // }
-
-    // const joinEvent = () => {
-    //     setIsJoining(true)
-    //     firestore.collection("events").doc.id.update({
-    //         attendies: {
-    //             user
-    //         }
-    //     }).then(function () {
-    //         console.log("Frank food updated");
-    //     });
-    // }
-
-    // useEffect(() => {
-
-    //     for (const document of documents) {
-    //         // console.log(document);
-    //  let findId = 
-    //     }
-
-
-    // }, [user])
-
 
 
 
     const handleEventJoin = async (item) => {
         console.log('event =>', item.id)
-        const docRef = doc(firestore, "events", item.id)
-        let { fullName, email, uid } = user;
-        const formData = {
-            fullName,
-            email,
-            uid
-        }
-
-        let findData = documents.find((eventDoc) => {
-            return eventDoc.id === item.id
-        })
-
-        let attendiesData = findData?.attendies;
-        attendiesData.push(formData)
-        console.log(findData);
-
-        try {
-            await setDoc(docRef, findData, { merge: true })
-            console.log("Data has been updated");
-        } catch (error) {
-            console.log(error);
-        }
-
-
     }
 
 
